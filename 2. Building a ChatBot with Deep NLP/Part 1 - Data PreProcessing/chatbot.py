@@ -1,22 +1,19 @@
 # Building a ChatBot with Deep NLP
- 
- 
+
  
 # Importing the libraries
 import numpy as np
 import tensorflow as tf
 import re
 import time
+
  
- 
- 
-########## PART 1 - DATA PREPROCESSING ##########
- 
- 
+# PART 1 - DATA PREPROCESSING ##########
+
  
 # Importing the dataset
-lines = open('movie_lines.txt', encoding = 'utf-8', errors = 'ignore').read().split('\n')
-conversations = open('movie_conversations.txt', encoding = 'utf-8', errors = 'ignore').read().split('\n')
+lines = open('movie_lines.txt', encoding='utf-8', errors='ignore').read().split('\n')
+conversations = open('movie_conversations.txt', encoding='utf-8', errors='ignore').read().split('\n')
  
 # Creating a dictionary that maps each line and its id
 id2line = {}
@@ -38,7 +35,8 @@ for conversation in conversations_ids:
     for i in range(len(conversation) - 1):
         questions.append(id2line[conversation[i]])
         answers.append(id2line[conversation[i+1]])
- 
+
+
 # Doing a first cleaning of the texts
 def clean_text(text):
     text = text.lower()
@@ -56,7 +54,8 @@ def clean_text(text):
     text = re.sub(r"can't", "cannot", text)
     text = re.sub(r"[-()\"#/@;:<>{}+=~|.?,]", "", text)
     return text
- 
+
+
 # Cleaning the questions
 clean_questions = []
 for question in questions:
@@ -141,4 +140,3 @@ for length in range(1, 25 + 1):
         if len(i[1]) == length:
             sorted_clean_questions.append(questions_into_int[i[0]])
             sorted_clean_answers.append(answers_into_int[i[0]])
-			
