@@ -149,10 +149,10 @@ for length in range(1, 25 + 1):
  
 # Creating placeholders for the inputs and the targets
 def model_inputs():
-    inputs = tf.placeholder(tf.int32, [None, None], name = 'input')
-    targets = tf.placeholder(tf.int32, [None, None], name = 'target')
-    lr = tf.placeholder(tf.float32, name = 'learning_rate')
-    keep_prob = tf.placeholder(tf.float32, name = 'keep_prob')
+    inputs = tf.placeholder(tf.int32, [None, None], name='input')
+    targets = tf.placeholder(tf.int32, [None, None], name='target')
+    lr = tf.placeholder(tf.float32, name='learning_rate')
+    keep_prob = tf.placeholder(tf.float32, name='keep_prob')
     return inputs, targets, lr, keep_prob
 
 
@@ -167,13 +167,13 @@ def preprocess_targets(targets, word2int, batch_size):
 # Creating the Encoder RNN
 def encoder_rnn(rnn_inputs, rnn_size, num_layers, keep_prob, sequence_length):
     lstm = tf.contrib.rnn.BasicLSTMCell(rnn_size)
-    lstm_dropout = tf.contrib.rnn.DropoutWrapper(lstm, input_keep_prob = keep_prob)
+    lstm_dropout = tf.contrib.rnn.DropoutWrapper(lstm, input_keep_prob=keep_prob)
     encoder_cell = tf.contrib.rnn.MultiRNNCell([lstm_dropout] * num_layers)
-    encoder_output, encoder_state = tf.nn.bidirectional_dynamic_rnn(cell_fw = encoder_cell,
-                                                                    cell_bw = encoder_cell,
-                                                                    sequence_length = sequence_length,
-                                                                    inputs = rnn_inputs,
-                                                                    dtype = tf.float32)
+    encoder_output, encoder_state = tf.nn.bidirectional_dynamic_rnn(cell_fw=encoder_cell,
+                                                                    cell_bw=encoder_cell,
+                                                                    sequence_length=sequence_length,
+                                                                    inputs=rnn_inputs,
+                                                                    dtype=tf.float32)
     return encoder_state
 
 
@@ -186,7 +186,7 @@ def decode_training_set(encoder_state, decoder_cell, decoder_embedded_input, seq
                                                                               attention_values,
                                                                               attention_score_function,
                                                                               attention_construct_function,
-                                                                              name = "attn_dec_train")
+                                                                              name="attn_dec_train")
     decoder_output, decoder_final_state, decoder_final_context_state = tf.contrib.seq2seq.dynamic_rnn_decoder(decoder_cell,
                                                                                                               training_decoder_function,
                                                                                                               decoder_embedded_input,
