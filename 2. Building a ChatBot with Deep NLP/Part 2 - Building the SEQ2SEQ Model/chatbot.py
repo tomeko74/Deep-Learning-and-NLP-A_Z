@@ -200,9 +200,12 @@ def decode_training_set(encoder_state, decoder_cell, decoder_embedded_input, seq
 
 
 # Decoding the test/validation set
-def decode_test_set(encoder_state, decoder_cell, decoder_embeddings_matrix, sos_id, eos_id, maximum_length, num_words, decoding_scope, output_function, keep_prob, batch_size):
+def decode_test_set(encoder_state, decoder_cell, decoder_embeddings_matrix, sos_id, eos_id, maximum_length, num_words,
+                    decoding_scope, output_function, keep_prob, batch_size):
     attention_states = tf.zeros([batch_size, 1, decoder_cell.output_size])
-    attention_keys, attention_values, attention_score_function, attention_construct_function = tf.contrib.seq2seq.prepare_attention(attention_states, attention_option = "bahdanau", num_units = decoder_cell.output_size)
+    attention_keys, attention_values, attention_score_function, attention_construct_function = tf.contrib.seq2seq.prepare_attention(attention_states,
+                                                                                                                                    attention_option="bahdanau",
+                                                                                                                                    num_units=decoder_cell.output_size)
     test_decoder_function = tf.contrib.seq2seq.attention_decoder_fn_inference(output_function,
                                                                               encoder_state[0],
                                                                               attention_keys,
@@ -259,7 +262,8 @@ def decoder_rnn(decoder_embedded_input, decoder_embeddings_matrix, encoder_state
 
 
 # Building the seq2seq model
-def seq2seq_model(inputs, targets, keep_prob, batch_size, sequence_length, answers_num_words, questions_num_words, encoder_embedding_size, decoder_embedding_size, rnn_size, num_layers, questionswords2int):
+def seq2seq_model(inputs, targets, keep_prob, batch_size, sequence_length, answers_num_words, questions_num_words,
+                  encoder_embedding_size, decoder_embedding_size, rnn_size, num_layers, questionswords2int):
     encoder_embedded_input = tf.contrib.layers.embed_sequence(inputs,
                                                               answers_num_words + 1,
                                                               encoder_embedding_size,
