@@ -372,8 +372,7 @@ early_stopping_stop = 1000
 checkpoint = "./chatbot_weights.ckpt"
 session.run(tf.global_variables_initializer())
 for epoch in range(1, epochs + 1):
-    for batch_index, (padded_questions_in_batch, padded_answers_in_batch) in enumerate(
-            split_into_batches(training_questions, training_answers, batch_size)):
+    for batch_index, (padded_questions_in_batch, padded_answers_in_batch) in enumerate(split_into_batches(training_questions, training_answers, batch_size)):
         starting_time = time.time()
         _, batch_training_loss_error = session.run([optimizer_gradient_clipping, loss_error],
                                                    {inputs: padded_questions_in_batch,
@@ -385,32 +384,28 @@ for epoch in range(1, epochs + 1):
         ending_time = time.time()
         batch_time = ending_time - starting_time
         if batch_index % batch_index_check_training_loss == 0:
-            print(
-                'Epoch: {:>3}/{}, Batch: {:>4}/{}, Training Loss Error: {:>6.3f}, Training Time on 100 Batches: {:d} seconds'.format(
-                    epoch,
-                    epochs,
-                    batch_index,
-                    len(training_questions) // batch_size,
-                    total_training_loss_error / batch_index_check_training_loss,
-                    int(batch_time * batch_index_check_training_loss)))
+            print('Epoch: {:>3}/{}, Batch: {:>4}/{}, Training Loss Error: {:>6.3f}, Training Time on 100 Batches: {:d} seconds'.format(
+                  epoch,
+                  epochs,
+                  batch_index,
+                  len(training_questions) // batch_size,
+                  total_training_loss_error / batch_index_check_training_loss,
+                  int(batch_time * batch_index_check_training_loss)))
             total_training_loss_error = 0
         if batch_index % batch_index_check_validation_loss == 0 and batch_index > 0:
             total_validation_loss_error = 0
             starting_time = time.time()
-            for batch_index_validation, (padded_questions_in_batch, padded_answers_in_batch) in enumerate(
-                    split_into_batches(validation_questions, validation_answers, batch_size)):
+            for batch_index_validation, (padded_questions_in_batch, padded_answers_in_batch) in enumerate(split_into_batches(validation_questions, validation_answers, batch_size)):
                 batch_validation_loss_error = session.run(loss_error, {inputs: padded_questions_in_batch,
                                                                        targets: padded_answers_in_batch,
                                                                        lr: learning_rate,
-                                                                       sequence_length: padded_answers_in_batch.shape[
-                                                                           1],
+                                                                       sequence_length: padded_answers_in_batch.shape[1],
                                                                        keep_prob: 1})
                 total_validation_loss_error += batch_validation_loss_error
             ending_time = time.time()
             batch_time = ending_time - starting_time
             average_validation_loss_error = total_validation_loss_error / (len(validation_questions) / batch_size)
-            print('Validation Loss Error: {:>6.3f}, Batch Validation Time: {:d} seconds'.format(
-                average_validation_loss_error, int(batch_time)))
+            print('Validation Loss Error: {:>6.3f}, Batch Validation Time: {:d} seconds'.format(average_validation_loss_error, int(batch_time)))
             learning_rate *= learning_rate_decay
             if learning_rate < min_learning_rate:
                 learning_rate = min_learning_rate
